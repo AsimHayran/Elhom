@@ -96,7 +96,7 @@
   <canvas id="matrix"></canvas>
 
   <!-- Rickroll Audio (hidden) -->
-  <audio id="rickroll" muted preload="auto">
+  <audio id="rickroll" muted autoplay preload="auto">
     <source src="https://www.myinstants.com/media/sounds/rickroll.mp3" type="audio/mpeg">
     Your browser does not support the audio tag.
   </audio>
@@ -154,14 +154,31 @@ Alt+F4 to uninstall shame.exe
     });
 
     // 🔊 Rickroll autoplay after 5 seconds
- setTimeout(() => {
+  // 🔊 Rickroll autoplay after 5 seconds
+    window.addEventListener('load', () => {
     const audio = document.getElementById('rickroll');
-    audio.muted = true;
-    audio.play().then(() => {
-      audio.muted = false;
-      audio.volume = 0.6;
-    }).catch(e => console.warn("Autoplay blocked", e));
-  }, 5000);
+    
+    setTimeout(() => {
+      // Try playing muted audio to trigger autoplay
+      audio.play().then(() => {
+        // After it starts, unmute and adjust volume
+        audio.muted = false;
+        audio.volume = 0.7;
+      }).catch(err => {
+        console.warn("Autoplay failed, waiting for user interaction");
+
+        // Fallback: Wait for first click/tap to trigger it
+        const unlock = () => {
+          audio.muted = false;
+          audio.volume = 0.7;
+          audio.play();
+          document.removeEventListener('click', unlock);
+        };
+
+        document.addEventListener('click', unlock);
+      });
+    }, 5000);
+  });
 
   </script>
 </body>
