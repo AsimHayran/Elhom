@@ -155,10 +155,14 @@ Alt+F4 to uninstall shame.exe
 
     // 🔊 Rickroll autoplay after 5 seconds
     setTimeout(() => {
-      const audio = document.getElementById('rickroll');
-      audio.volume = 0.6;
-      audio.play().catch(e => console.warn("Autoplay blocked", e));
-    }, 5000);
+  const audio = document.getElementById('rickroll');
+  audio.muted = true; // 🔇 Start muted
+  audio.play().then(() => {
+    audio.muted = false; // 🔊 Unmute after play starts
+    audio.volume = 0.6;
+  }).catch(e => console.warn("Autoplay blocked", e));
+}, 5000);
+
   </script>
 </body>
 </html>
